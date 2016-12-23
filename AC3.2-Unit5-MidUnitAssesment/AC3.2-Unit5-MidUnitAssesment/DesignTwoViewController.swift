@@ -23,7 +23,7 @@ class DesignTwoViewController: UIViewController, CellTitled {
   lazy var smittenKittenImageView: UIImageView = {
     let image = UIImage(named: "smitten_kitten")
     let imageView = UIImageView(image: image)
-    imageView.contentMode = .scaleAspectFit
+    imageView.contentMode = .scaleAspectFill
     imageView.translatesAutoresizingMaskIntoConstraints = false
     return imageView
   }()
@@ -58,6 +58,7 @@ class DesignTwoViewController: UIViewController, CellTitled {
     self.configureConstraints()
     
     self.title = titleForCell
+    self.edgesForExtendedLayout = []
   }
   
   func setupViewHierarchy() {
@@ -74,7 +75,7 @@ class DesignTwoViewController: UIViewController, CellTitled {
     
     let labelConstraints = [
       smittenKittenLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 16.0),
-      smittenKittenLabel.centerXAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 24.0)
+      smittenKittenLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 24.0)
     ]
     
     let scrollViewConstraints = [
@@ -85,8 +86,15 @@ class DesignTwoViewController: UIViewController, CellTitled {
     ]
     
     let imageConstraints = [
-      smittenKittenImageView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+//      smittenKittenImageView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+//      smittenKittenImageView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
+        smittenKittenImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 2.0),
+        smittenKittenImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier:2.0),
+      //
+      smittenKittenImageView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
       smittenKittenImageView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
+      smittenKittenImageView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+      smittenKittenImageView.topAnchor.constraint(equalTo: scrollView.topAnchor)
     ]
     
     let _ = [labelConstraints, scrollViewConstraints, imageConstraints].map{ $0.map{ $0.isActive = true } }
