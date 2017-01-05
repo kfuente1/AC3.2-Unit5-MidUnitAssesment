@@ -56,9 +56,7 @@ class DesignTwoViewController: UIViewController, CellTitled {
     
     self.setupViewHierarchy()
     self.configureConstraints()
-    
     self.title = titleForCell
-    self.edgesForExtendedLayout = []
   }
   
   func setupViewHierarchy() {
@@ -72,10 +70,13 @@ class DesignTwoViewController: UIViewController, CellTitled {
   
   func configureConstraints() {
     // something about these constraints isn't right...
+    // set the extended lay out so that the image is under the nav bar
+    self.edgesForExtendedLayout = []
     
     let labelConstraints = [
       smittenKittenLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 16.0),
-      smittenKittenLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 24.0)
+      //smittenKittenLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 24.0)
+        smittenKittenLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
     ]
     
     let scrollViewConstraints = [
@@ -84,17 +85,14 @@ class DesignTwoViewController: UIViewController, CellTitled {
       scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -8.0),
       scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8.0)
     ]
-    
     let imageConstraints = [
-//      smittenKittenImageView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
-//      smittenKittenImageView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
-        smittenKittenImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 2.0),
-        smittenKittenImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier:2.0),
+    smittenKittenImageView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+    smittenKittenImageView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
+    
       //
       smittenKittenImageView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
-      smittenKittenImageView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
       smittenKittenImageView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
-      smittenKittenImageView.topAnchor.constraint(equalTo: scrollView.topAnchor)
+    
     ]
     
     let _ = [labelConstraints, scrollViewConstraints, imageConstraints].map{ $0.map{ $0.isActive = true } }

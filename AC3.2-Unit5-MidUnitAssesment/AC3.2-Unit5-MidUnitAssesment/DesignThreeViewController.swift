@@ -165,6 +165,67 @@ class DesignThreeViewController: UIViewController, CellTitled {
   }
   
   func configureLandscapeConstraints() {
+    // 1. remove the constraints for views that are owned by self.view
+   // self.prepareForRotation([profileImageView, contentView, nameLabel, followLabel, hexLabel, likeLabel])
+    
+    // 2. remove the height constraint, which is owned by its view
+    bannerImageView.removeConstraints(bannerImageView.constraints)
+    let bannerImageContraints = [
+        // 3. set height constraint to 0.0 to effectively hide the view
+        bannerImageView.heightAnchor.constraint(equalToConstant: 0.0)
+    ]
+    
+    contentView.removeConstraints(contentView.constraints)
+    let contentViewConstraints = [
+        contentView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+        contentView.topAnchor.constraint(equalTo: self.view.topAnchor),
+        contentView.trailingAnchor.constraint(equalTo: contentView.leadingAnchor),
+        contentView.bottomAnchor.constraint(equalTo: contentView.topAnchor)
+    ]
+    
+    // 4. Set x/y position for profile image, since it was removed by removeParentOwnedConstraints
+    //    - profile image owns its own width/height constraints, so nothing needs to change there as
+    //      it was not removed by calling removeParentOwnedConstraints
+    let profileImageConstraints = [
+        profileImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+        profileImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+    ]
+    
+    // 5. Update label constraints
+    let nameLabelConstraints = [
+        nameLabel.centerXAnchor.constraint(equalTo: profileImageView.centerXAnchor),
+        nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8.0)
+    ]
+    
+    let likeLabelConstraints = [
+        likeLabel.centerXAnchor.constraint(equalTo: profileImageView.centerXAnchor),
+        likeLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8.0),
+        ]
+    
+    let followLabelConstraints = [
+        followLabel.firstBaselineAnchor.constraint(equalTo: likeLabel.firstBaselineAnchor),
+        followLabel.centerXAnchor.constraint(equalTo: profileImageView.leadingAnchor)
+        
+        // this would also be considered acceptable,
+        //      followLabel.trailingAnchor.constraint(equalTo: likeLabel.leadingAnchor, constant: -8.0)
+    ]
+    
+    let hexLabelConstraints = [
+        hexLabel.firstBaselineAnchor.constraint(equalTo: likeLabel.firstBaselineAnchor),
+        hexLabel.centerXAnchor.constraint(equalTo: profileImageView.trailingAnchor)
+        
+        // this would also be considered acceptable
+        //      hexLabel.leadingAnchor.constraint(equalTo: likeLabel.trailingAnchor, constant: 8.0)
+    ]
+    
+    let _ = [ bannerImageContraints,
+              profileImageConstraints,
+              contentViewConstraints,
+              nameLabelConstraints,
+              likeLabelConstraints,
+              followLabelConstraints,
+              hexLabelConstraints ].map{ $0.map{ $0.isActive = true } }
+
     
   }
   

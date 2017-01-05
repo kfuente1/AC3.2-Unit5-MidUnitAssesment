@@ -36,6 +36,9 @@ class RecipesTableViewController: UITableViewController, CellTitled, NSFetchedRe
         textField.autocorrectionType = .no
         self.navigationItem.titleView = textField
         textField.delegate = self
+        //helps with the dynamics of the cell 
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         // this should filter the results from core data without any network call
         let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
@@ -60,27 +63,30 @@ class RecipesTableViewController: UITableViewController, CellTitled, NSFetchedRe
                         let pc = appDelegate.persistentContainer
                         pc.performBackgroundTask { (context: NSManagedObjectContext) in
                             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-       
+                            
                             // Comment #2
                             // insert your core data objects here
                             
-                            let recipes = NSEntityDescription.insertNewObject(forEntityName:"Recipes", into: context) as! Recipes
-                            for recipeObj in records {
-                                recipes.populate(from: recipeObj)
-                                dump(recipeObj)
-                            if context.hasChanges {
-                            do {
-                                try context.save()
-                                print("DATA WAS GOTTEN and SAVED*******")
-                            }
-                            catch let error {
-                                print(error)
-                            }
+                    
                             
-                            DispatchQueue.main.async {
-                                self.initializeFetchedResultsController()
-                                self.tableView.reloadData()
+                            for recipeObj in records {
+                                let recipe = Recipes(context: context)
+                                //                                let recipe = NSEntityDescription.insertNewObject(forEntityName:"Recipes", into: context) as! Recipes 
+                                recipe.populate(from: recipeObj)
                             }
+                            // dump(recipeObj)
+                            if context.hasChanges {
+                                do {
+                                    try context.save()
+                                    print("DATA WAS GOTTEN and SAVED*******")
+                                }
+                                catch let error {
+                                    print(error)
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    self.initializeFetchedResultsController()
+                                    self.tableView.reloadData()
                                 }
                             }
                         }
